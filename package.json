@@ -40,6 +40,7 @@
   "scripts": {
     "test": "mocha",
     "test-speaker": "node test/manual-testing/AudioContext-sound-output.js",
-    "pretest-speaker": "npm install speaker"
+    "pretest-speaker": "npm install speaker",
+    "anto-test": "node test/manual-testing/AntoScriptProcessorTest.js"
   }
 }
