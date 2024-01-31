@@ -257,7 +257,7 @@ class Oscillator {
                 //we simply zero output when other waveform is mixed with noise. On real SID LFSR continuously gets filled by zero and locks up. ($C1 waveform with pw<8 can keep it for a while...)
                 this.wfout = (this.wf & 0x70) ? 0 : ((this.tmp & 0x100000) >> 5) + ((this.tmp & 0x40000) >> 4) + ((this.tmp & 0x4000) >> 1) + ((this.tmp & 0x800) << 1) + ((this.tmp & 0x200) << 2) + ((this.tmp & 0x20) << 5) + ((this.tmp & 0x04) << 7) + ((this.tmp & 0x01) << 8);
             } else if (this.wf & this.PULSE_BITMASK) { //simple pulse
-                this.pw = (this.REG[this.V[c]+this.PW_LO] + this.REG[this.V[c]+this.PW_LO] & 0xF) * 16; //(memory[chnadd + 2] + (memory[chnadd + 3] & 0xF) * 256) * 16;//pw = pulsewidth (+'0')| TODO : set on the fly
+                this.pw = (this.REG[this.V[c]+this.PW_LO] + this.REG[this.V[c]+this.PW_HI] & 0xF) * 16; //(memory[chnadd + 2] + (memory[chnadd + 3] & 0xF) * 256) * 16;//pw = pulsewidth (+'0')| TODO : set on the fly
 
                 this.tmp = this.accuadd >> 9;
                 if (0 < this.pw && this.pw < this.tmp) {
