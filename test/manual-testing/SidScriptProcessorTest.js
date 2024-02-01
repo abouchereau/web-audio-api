@@ -32,7 +32,13 @@ node.connect(context.destination);
 
 
 
-
+process.on('message', msg => {
+    if (msg.length>1) {
+        for(let i = 0;i<msg.length;i+=2) {
+            osc.setReg(msg[i], msg[i+1]);
+        }
+    }
+});
 
 
 
@@ -85,8 +91,7 @@ class Oscillator {
 
 
         this.clk_ratio = this.C64_PAL_CPUCLK / this.samplingRate;
-        this.framecnt = 1;
-        this.mix = 0;		//utilisé ?
+
         this.ADSRstate = [0, 0, 0];//, 0, 0, 0, 0, 0, 0];
         this.ratecnt = [0, 0, 0];//, 0, 0, 0, 0, 0, 0];
         this.envcnt = [0, 0, 0];//, 0, 0, 0, 0, 0, 0];
@@ -117,12 +122,15 @@ class Oscillator {
             this.ADSR_exptable.fill(ADSR_exptable_filler[i+1], start_exptable);
             start_exptable += ADSR_exptable_filler[i];
         }
-        this.frameIterator = 0;
+
         this.iterate = 0;
 
+    }
 
-        this.oldDate = Date.now();
-        this.frame2Iterator = 0;
+    setReg(index, value) {
+        if (index < this.REG.length && value >=0 && value <= 0xFF) {
+            this.REG[index] = value;
+        }
     }
 
     setSampleRate(a) {
@@ -158,10 +166,6 @@ class Oscillator {
 
             this.prevgate = (this.ADSRstate[c] & this.GATE_BITMASK);
             this.ctrl = this.REG[this.V[c]+this.WG]; //memory[chnadd + 4];//ctrl = waveform/gate | TODO : set on the fly
-            /*  if (this.mixer.voice[c].gate != debug.lastGate[c]) {
-                  debug.lastGate[c] = this.mixer.voice[c].gate;
-                  console.log("Change GATE", c, debug.lastGate[c]);
-              }*/
             this.wf = this.ctrl & 0xF0;
             this.test = this.ctrl & this.TEST_BITMASK;
             this.SR = this.REG[this.V[c]+this.SR]; //memory[chnadd + 6];//SR = Sustain/Release | TODO : set on the fly
@@ -172,10 +176,7 @@ class Oscillator {
 
             //ADSR envelope generator:
             if (this.prevgate != (this.ctrl & this.GATE_BITMASK)) { //gatebit-change?
-                /*if (this.ctrl & this.GATE_BITMASK == 1) {
-                    Chrono.point('gatebit change');
-                    Chrono.average();
-                }*/
+
                 if (this.prevgate) {
                     this.ADSRstate[c] &= 0xFF - (this.GATE_BITMASK | this.ATTACK_BITMASK | this.DECAYSUSTAIN_BITMASK);
                 } else {
