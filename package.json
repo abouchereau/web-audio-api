@@ -41,6 +41,8 @@
     "test": "mocha",
     "test-speaker": "node test/manual-testing/AudioContext-sound-output.js",
     "pretest-speaker": "npm install speaker",
-    "anto-test": "node test/manual-testing/AntoScriptProcessorTest.js"
+    "anto-test": "node test/manual-testing/AntoScriptProcessorTest.js",
+    "anto-test-sid": "node test/manual-testing/testSid.js",
+    "anto-test-sid-direct": "node test/manual-testing/SidScriptProcessorTest.js"
   }
 }

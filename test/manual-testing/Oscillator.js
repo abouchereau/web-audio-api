@@ -328,11 +328,12 @@ class Oscillator {
             this.output += this.tmp;
         }
 
-        if (this.output > 0 && this.iterate%300 == 0) {
-            console.log(this.output);
-        }
 
-        return (this.output / this.OUTPUT_SCALEDOWN) * this.REG[this._TVOL] & 0xF; // SID output
+        let sampleReturn = (this.output / this.OUTPUT_SCALEDOWN) * (this.REG[this._TVOL] & 0xF);
+        if (sampleReturn> 0 && this.iterate%300 == 0) {
+            console.log(sampleReturn);
+        }
+        return sampleReturn;// SID output
     }
     createCombinedWF(a, b, c, d) { //I found out how the combined waveform works (neighboring bits affect each other recursively)
         for (var i = 0; i < 4096; i++) {
