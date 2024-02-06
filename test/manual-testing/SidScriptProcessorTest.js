@@ -17,7 +17,7 @@ context.outStream = new Speaker({
 })
 
 
-const node = new ScriptProcessorNode(context, 256, 1, 1);
+const node = new ScriptProcessorNode(context, 1024, 1, 1);
 const osc = new Oscillator();
 osc.setSampleRate(context.sampleRate);
 

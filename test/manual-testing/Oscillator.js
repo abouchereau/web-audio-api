@@ -331,7 +331,7 @@ class Oscillator {
 
         let sampleReturn = (this.output / this.OUTPUT_SCALEDOWN) * (this.REG[this._TVOL] & 0xF);
         if (sampleReturn> 0 && this.iterate%300 == 0) {
-            console.log(sampleReturn);
+           // console.log(sampleReturn);
         }
         return sampleReturn;// SID output
     }
