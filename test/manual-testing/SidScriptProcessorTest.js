@@ -27,12 +27,15 @@ node.onaudioprocess = (e)=>{
     for (let i = 0; i < outBuffer.length; i++) {
         outData[i] = osc.play();
     }
-}
+};
 node.connect(context.destination);
 
+let auj = Date.now();
 
 process.on('message', msg => {
     if (msg.length>1) {
+        console.log(Date.now()-auj);
+        auj = Date.now();
         for(let i = 0;i<msg.length;i+=2) {
             osc.setReg(msg[i], msg[i+1]);
         }
